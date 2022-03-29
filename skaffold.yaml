@@ -1,14 +1,18 @@
-apiVersion: skaffold/v2beta11
+apiVersion: skaffold/v2alpha3
 kind: Config
-metadata:
-  name: ticketing
-build:
-  artifacts:
-  - image: sohan0077/ms-2-auth
-    context: auth
-    docker:
-      dockerfile: Dockerfile
 deploy:
   kubectl:
     manifests:
-    - infra/k8s/auth-deployment.yaml
+      - ./infra/k8s/*
+build:
+  local:
+    push: false
+  artifacts:
+    - image: sohan0077/multi-auth
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
