@@ -21,7 +21,7 @@ router.post(
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      throw new RequestValidationError(errors.array());
+      res.status(400).send(errors.array());
     }
 
     const { email, password } = req.body;
@@ -29,7 +29,7 @@ router.post(
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      throw new BadRequestError("Email in use");
+      res.status(400).send({ message: "email is use" });
     }
 
     const user = User.build({
@@ -44,7 +44,7 @@ router.post(
         id: user.id,
         email: user.email,
       },
-      "asdf"
+      process.env.JWT_KEY!
     );
     //store jwt in session
     req.session = {

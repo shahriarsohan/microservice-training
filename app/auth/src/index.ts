@@ -27,12 +27,13 @@ app.use(signOut);
 app.use(signupRouter);
 
 app.all("*", async (req, res) => {
-  throw new NotFoundError();
+  console.log("route not found");
 });
 
 app.use(errorHandler);
 
 const start = async () => {
+  if (!process.env.JWT_KEY) throw new Error("JWT KEY must be defined");
   try {
     await mongoose.connect("mongodb://auth-mongo-svc:27017/auth");
 
